@@ -70,5 +70,7 @@ class GameLogic:
                         score += 200
         return score
 
-if __name__=='__main__':
-    # GameLogic.calculate_score(tup)
+
+
+# if __name__=='__main__':
+    # GameLogic.calculate_score(tup) 
