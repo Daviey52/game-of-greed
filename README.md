@@ -13,8 +13,9 @@
 
 ## Github
 
-- 
+- [Repo](https://github.com/Daviey52/game-of-greed)
+- [Lab 01 Pull Request](https://github.com/Daviey52/game-of-greed/pull/2)
 
 ## Resources Used
 
-- https://www.geeksforgeeks.org/python-elements-frequency-in-tuple/
+- [python-elements-frequency-in-tuple]https://www.geeksforgeeks.org/python-elements-frequency-in-tuple/
