@@ -18,4 +18,4 @@
 
 ## Resources Used
 
-- [python-elements-frequency-in-tuple]https://www.geeksforgeeks.org/python-elements-frequency-in-tuple/
+- [python-elements-frequency-in-tuple](https://www.geeksforgeeks.org/python-elements-frequency-in-tuple/)
