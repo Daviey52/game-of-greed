@@ -25,7 +25,7 @@
 - [Repo](https://github.com/Daviey52/game-of-greed)
 - [Lab 01 Pull Request](https://github.com/Daviey52/game-of-greed/pull/2)
 
-- [Lab 02 Pull Request](Lab 01 Pull Request](https://github.com/Daviey52/game-of-greed/pull/6)
+- [Lab 02 Pull Request](https://github.com/Daviey52/game-of-greed/pull/6)
 
 ## Resources Used
 
