@@ -24,7 +24,7 @@ class GameLogic:
         
         for el in tup:
                 freq[el] += 1
-        print(freq.items())
+        # print(freq.items())
 
         #Three pairs
         for key , y in freq.items():
