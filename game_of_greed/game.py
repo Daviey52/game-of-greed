@@ -1,13 +1,12 @@
 from game_of_greed.game_logic import GameLogic
+
 # from banker import Banker
 
 
 class Game:
-    def __init__(self, count = 0, score = 0):
+    def __init__(self, count=0, score=0):
         self.count = count
         self.score = score
-
-
 
     def play(self, roller=None):
         roller = roller or GameLogic.roll_dice
@@ -15,7 +14,7 @@ class Game:
         dice = 6
         score = 0
         banked = 0
-        
+
         print("Welcome to Game of Greed")
         print("(y)es to play or (n)o to decline")
         play_option = input("> ")
@@ -26,7 +25,7 @@ class Game:
             start_game = False
 
         while start_game:
-            
+
             if play_option.lower() == "y":
                 rounds += 1
                 print(f"Starting round {rounds}")
@@ -34,10 +33,10 @@ class Game:
                 playing = roller(dice)
                 roll_No = ""
                 for roll in playing:
-                    roll_No = roll_No + str(roll)+ " "
-                
+                    roll_No = roll_No + str(roll) + " "
+
                 print(f"*** {roll_No}***")
-                
+
                 print("Enter dice to keep, or (q)uit:")
                 play_option = input("> ")
             elif play_option.lower() == "q":
@@ -54,7 +53,7 @@ class Game:
                 playing = roller(dice)
                 roll_No = ""
                 for roll in playing:
-                    roll_No = roll_No + str(roll)+ " "
+                    roll_No = roll_No + str(roll) + " "
                 print(f"*** {roll_No}***")
                 print("Enter dice to keep, or (q)uit:")
                 play_option = input("> ")
@@ -63,10 +62,10 @@ class Game:
                 playing = roller(dice)
                 roll_No = ""
                 for roll in playing:
-                    roll_No = roll_No + str(roll)+ " "
-                
+                    roll_No = roll_No + str(roll) + " "
+
                 print(f"*** {roll_No}***")
-                
+
                 print("Enter dice to keep, or (q)uit:")
                 play_option = input("> ")
             elif int(play_option):
@@ -74,15 +73,13 @@ class Game:
                 val = [int(i) for i in play_option]
                 score += GameLogic.calculate_score(val)
                 dice -= len(val)
-                
+
                 # print(score)
                 # unbanked = round_score(score)
                 # print(unbanked)
                 print(f"You have {score} unbanked points and {dice} dice remaining")
-                print('(r)oll again, (b)ank your points or (q)uit:')
+                print("(r)oll again, (b)ank your points or (q)uit:")
                 play_option = input("> ")
-
-                
 
     # def includes(self,value,ll):
     #     current = ll.head
@@ -90,7 +87,8 @@ class Game:
     #         if current.value == value:
     #             return True
     #         current = current.next
-    #     return False 
+    #     return False
 
-if __name__=='__main__':
-    Game.play(1) 
+
+if __name__ == "__main__":
+    Game.play(1)

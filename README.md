@@ -11,13 +11,22 @@
 3. Handle rolling dice
 4. Handle banking points
 
+## Lab 02
+
+1. Application should simulate rolling between 1 and 6 dice
+2. Application should allow user to set aside dice each roll
+3. Application should allow “banking” current score or rolling again.
+4. Application should keep track of total score
+5. Application should keep track of current round
+6. Application should have automated tests to ensure proper operation
+
 ## Github
 
 - [Repo](https://github.com/Daviey52/game-of-greed)
 - [Lab 01 Pull Request](https://github.com/Daviey52/game-of-greed/pull/2)
 
+- [Lab 02 Pull Request]([Lab 01 Pull Request](https://github.com/Daviey52/game-of-greed/pull/6)
+
 ## Resources Used
 
-
 - [python-elements-frequency-in-tuple](https://www.geeksforgeeks.org/python-elements-frequency-in-tuple/)
-
