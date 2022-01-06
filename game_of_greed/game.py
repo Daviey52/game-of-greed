@@ -1,16 +1,15 @@
-from game_of_greed.game_logic import GameLogic
-# from banker import Banker
+from game_logic import GameLogic
+from banker import Banker
+
+# from game_of_greed.game_logic import GameLogic
+# from game_of_greed.banker import Banker
 
 
 class Game:
-    def __init__(self, count = 0, score = 0):
-        self.count = count
-        self.score = score
-
-
 
     def play(self, roller=None):
         roller = roller or GameLogic.roll_dice
+        
         rounds = 0
         dice = 6
         score = 0
@@ -35,16 +34,16 @@ class Game:
                 roll_No = ""
                 for roll in playing:
                     roll_No = roll_No + str(roll)+ " "
-                
                 print(f"*** {roll_No}***")
-                
                 print("Enter dice to keep, or (q)uit:")
                 play_option = input("> ")
+
             elif play_option.lower() == "q":
                 print(f"Thanks for playing. You earned {banked} points")
                 start_game = False
+
             elif play_option.lower() == "b":
-                banked += score
+                banked += (Banker.bank(Banker))
                 print(f"You banked {score} points in round {rounds}")
                 print(f"Total score is {banked} points")
                 rounds += 1
@@ -57,40 +56,40 @@ class Game:
                     roll_No = roll_No + str(roll)+ " "
                 print(f"*** {roll_No}***")
                 print("Enter dice to keep, or (q)uit:")
+                score = 0
                 play_option = input("> ")
+
             elif play_option.lower() == "r":
+                if dice == 0:
+                    dice = 6
                 print(f"Rolling {dice} dice...")
                 playing = roller(dice)
                 roll_No = ""
                 for roll in playing:
                     roll_No = roll_No + str(roll)+ " "
-                
                 print(f"*** {roll_No}***")
-                
                 print("Enter dice to keep, or (q)uit:")
                 play_option = input("> ")
+
             elif int(play_option):
-                score = 0
                 val = [int(i) for i in play_option]
+                print(val)
                 score += GameLogic.calculate_score(val)
+                shelved = (Banker.shelf(Banker,score))   
                 dice -= len(val)
-                
-                # print(score)
-                # unbanked = round_score(score)
-                # print(unbanked)
-                print(f"You have {score} unbanked points and {dice} dice remaining")
+                print(f"You have {shelved} unbanked points and {dice} dice remaining")
                 print('(r)oll again, (b)ank your points or (q)uit:')
                 play_option = input("> ")
 
-                
+    # def quit_game(message) 
+    def cheater(self):
+        print('Cheater!!! Or possibly made a typo...')           
 
-    # def includes(self,value,ll):
-    #     current = ll.head
-    #     while current != None:
-    #         if current.value == value:
-    #             return True
-    #         current = current.next
-    #     return False 
+
 
 if __name__=='__main__':
-    Game.play(1) 
+    Game.play(Game)
+    # try: 
+    #    Game.play(Game)
+    # except KeyboardInterrupt:
+    #     quit_game('Keyboard Interupt Detected')
