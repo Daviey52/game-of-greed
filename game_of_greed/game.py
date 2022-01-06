@@ -14,7 +14,7 @@ class Game:
         dice = 6
         score = 0
         banked = 0
-        
+
         print("Welcome to Game of Greed")
         print("(y)es to play or (n)o to decline")
         play_option = input("> ")
@@ -25,7 +25,7 @@ class Game:
             start_game = False
 
         while start_game:
-            
+
             if play_option.lower() == "y":
                 rounds += 1
                 print(f"Starting round {rounds}")
@@ -53,7 +53,7 @@ class Game:
                 playing = roller(dice)
                 roll_No = ""
                 for roll in playing:
-                    roll_No = roll_No + str(roll)+ " "
+                    roll_No = roll_No + str(roll) + " "
                 print(f"*** {roll_No}***")
                 print("Enter dice to keep, or (q)uit:")
                 score = 0
