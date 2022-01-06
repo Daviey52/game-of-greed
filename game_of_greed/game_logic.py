@@ -74,11 +74,12 @@ class GameLogic:
     @staticmethod
     def get_scorers(tup):
         new_list = []
-        for num in tup:
-           if GameLogic.calculate_score(tuple(num)) != 0:
-               new_list.append(num)
-
-
+        val = [int(i) for i in tup]
+        for num in val:
+            temp_list=[]
+            temp_list.append(num)
+            if GameLogic.calculate_score(temp_list) > 0:
+                new_list.append(num)
         return tuple(new_list)
 
     @staticmethod
