@@ -86,7 +86,6 @@ class Game:
         print('Cheater!!! Or possibly made a typo...')           
 
 
-
 if __name__=='__main__':
     Game.play(Game)
     # try: 
