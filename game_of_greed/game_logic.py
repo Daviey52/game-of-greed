@@ -71,8 +71,24 @@ class GameLogic:
                         score += 200
         return score
 
+    @staticmethod
     def get_scorers(tup):
-        pass
+        new_list = []
+        for num in tup:
+           if GameLogic.calculate_score(tuple(num)) != 0:
+               new_list.append(num)
+
+
+        return tuple(new_list)
+
+    @staticmethod
+    def validate_keepers(roll, keeper):
+        cheat = set(keeper).issubset(roll)
+        if GameLogic.calculate_score(roll) < GameLogic.calculate_score(keeper):
+            x = False
+        else:
+            x = True
+        return cheat and x
 
 # if __name__=='__main__':
     # GameLogic.calculate_score(tup) 
