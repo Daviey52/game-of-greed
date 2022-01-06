@@ -27,11 +27,8 @@ class GameLogic:
         # print(freq.items())
 
         #Three pairs
-        for key , y in freq.items():
-            if y == 2:
-                threepairs.append(key)
-            if len(threepairs) == 3:
-                score = 1500
+
+            
 
         # Straight
         if sorttup == [1,2,3,4,5,6]:
@@ -39,6 +36,7 @@ class GameLogic:
         else: 
             for key, y in freq.items():
                 # 3 or more 1s
+                
                 if key == 1 and y > 2:
                     if y == 3:
                         score += 1000
@@ -64,13 +62,17 @@ class GameLogic:
                         score += 100
                 # 2 occurances of the values 1 and 5
                 elif y == 2:
-                    if key == 5:
+                    threepairs.append(key)
+                    if len(threepairs) == 3:
+                        score = 1500
+                    elif key == 5:
                         score += 100
                     elif key == 1:
                         score += 200
         return score
 
-
+    def get_scorers(tup):
+        pass
 
 # if __name__=='__main__':
     # GameLogic.calculate_score(tup) 
