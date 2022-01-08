@@ -1,22 +1,23 @@
 
 class Banker:
-    
-    def __init__(self, balance = 0, shelved = 0 ):
-        self.balance = balance
-        self.shelved = shelved
-
-    def shelf(self,val):
-        self.shelved = val
-        return self.shelved
+    """Banker is reponsible for tracking points "on the shelf" and "in the bank"
+    version_1
+    """
+    def __init__(self):
+        self.balance = 0
+        self.shelved = 0
 
     def bank(self):
-        self.balance = self.shelved
+        amount_deposited = self.shelved
+        self.balance += self.shelved
         self.shelved = 0
-        return self.balance
-    
+        return amount_deposited
+
+    def shelf(self, amt):
+        self.shelved += amt
+
     def clear_shelf(self):
         self.shelved = 0
-
 
 
 

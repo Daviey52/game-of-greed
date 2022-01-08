@@ -1,113 +1,131 @@
-# from game_logic import GameLogic
-# from banker import Banker
-
+import sys
 
 from game_of_greed.game_logic import GameLogic
 from game_of_greed.banker import Banker
 
 
 class Game:
+    """Class for Game of Greed application
+    """
+
+    def __init__(self, num_rounds=20):
+
+        self.banker = Banker()
+        self.num_rounds = num_rounds
+        self.round_num = 0
 
     def play(self, roller=None):
-        roller = roller or GameLogic.roll_dice
-        
-        rounds = 0
-        dice = 6
-        score = 0
-        banked = 0
+        """Entry point for playing (or declining) a game
+
+        Args:
+            roller (function, optional): Allows passing in a custom dice roller function.
+                Defaults to None.
+        """
+
+        self._roller = roller or GameLogic.roll_dice
 
         print("Welcome to Game of Greed")
+
         print("(y)es to play or (n)o to decline")
-        play_option = input("> ")
-        start_game = True
+        response = input("> ")
 
-        if play_option.lower() == "n":
+        if response == "n":
             print("OK. Maybe another time")
-            start_game = False
+        else:
+            for round_num in range(1, self.num_rounds + 1):
+                self.start_round(round_num)
 
-        while start_game:
+            self.end_game()
 
-            if play_option.lower() == "y":
-                rounds += 1
-                print(f"Starting round {rounds}")
-                print(f"Rolling {dice} dice...")
-                playing = roller(dice)
-                roll_No = ""
-                for roll in playing:
-                    roll_No = roll_No + str(roll)+ " "
-                print(f"*** {roll_No}***")
-                print("Enter dice to keep, or (q)uit:")
-                play_option = Game.remove(Game,input("> "))
+    def end_game(self):
+        print(f"Thanks for playing. You earned {self.banker.balance} points")
+        sys.exit()
 
-            elif play_option.lower() == "q":
-                print(f"Thanks for playing. You earned {banked} points")
-                start_game = False
+    def start_round(self, round_num):
+        num_dice = 6
+        print(f"Starting round {round_num}")
+        round_score = 0
 
-            elif play_option.lower() == "b":
-                banked += (Banker.bank(Banker))
-                print(f"You banked {score} points in round {rounds}")
-                print(f"Total score is {banked} points")
-                rounds += 1
-                dice = 6
-                print(f"Starting round {rounds}")
-                print(f"Rolling {dice} dice...")
-                playing = roller(dice)
-                roll_No = ""
-                for roll in playing:
-                    roll_No = roll_No + str(roll) + " "
-                print(f"*** {roll_No}***")
-                print("Enter dice to keep, or (q)uit:")
-                score = 0
-                play_option = Game.remove(Game,input("> "))
+        while True:
+            print(f"Rolling {num_dice} dice...")
 
-            elif play_option.lower() == "r":
-                if dice == 0:
-                    dice = 6
-                print(f"Rolling {dice} dice...")
-                playing = roller(dice)
-                roll_No = ""
-                for roll in playing:
-                    roll_No = roll_No + str(roll)+ " "
-                print(f"*** {roll_No}***")
-                if GameLogic.calculate_score(playing) == 0:
-                    Game.zilch(Game)
-                    score = 0
-                    Banker.clear_shelf(Banker)
-                    play_option = 'b'
-                else:
-                    print("Enter dice to keep, or (q)uit:")
-                    play_option = Game.remove(Game,input("> "))
+            roll = self._roller(num_dice)
+            roll_string = " ".join([str(value) for value in roll])
+            print(f"*** {roll_string} ***")
 
-            elif int(play_option):
-                val = [int(i) for i in play_option]
-                if GameLogic.validate_keepers(tuple(playing), tuple(val)) == False:
-                    Game.cheater(Game,roll_No)
-                    play_option = Game.remove(Game,input("> "))
-                else:
-                    score += GameLogic.calculate_score(val)
-                    shelved = (Banker.shelf(Banker,score))   
-                    dice -= len(val)
-                    print(f"You have {shelved} unbanked points and {dice} dice remaining")
-                    print('(r)oll again, (b)ank your points or (q)uit:')
-                    play_option = input("> ")
+            preliminary_score = GameLogic.calculate_score(roll)
 
-    def cheater (self,roll_No):
-        print('Cheater!!! Or possibly made a typo...')
-        print(f"*** {roll_No}***")
-        print('Enter dice to keep, or (q)uit:')
-    
-    def zilch (self):
-        print('****************************************')
-        print('**        Zilch!!! Round over         **')
-        print('****************************************')
-    
-    def remove(self,string):
-        return string.replace(" ","")
+            if preliminary_score == 0:
+                self.zilch(round_num)
+                return
+
+            keeper_values = self.validate_keepers(roll, roll_string)
+
+            keeper_score = GameLogic.calculate_score(keeper_values)
+
+            round_score += keeper_score
+
+            num_dice -= len(keeper_values)
+
+            print(
+                f"You have {round_score} unbanked points and {num_dice} dice remaining"
+            )
+            print("(r)oll again, (b)ank your points or (q)uit:")
+            response = input("> ")
+
+            if response == "b":
+                self.banker.shelf(round_score)
+                banked_points = self.banker.bank()
+                self.end_round(round_num, banked_points)
+                break
+            elif response == "r":
+                if num_dice == 0:
+                    num_dice = 6
+            elif response == "q":
+                self.end_game()
+
+    def zilch(self, round_num):
+        """Zero scoring dice were rolled so end round with 0 points"""
+        print("****************************************")
+        print("**        Zilch!!! Round over         **")
+        print("****************************************")
+
+        self.end_round(round_num, 0)
+
+    def end_round(self, round_num, banked_points):
+        """bank points and finish round"""
+        print(f"You banked {banked_points} points in round {round_num}")
+        print(f"Total score is {self.banker.balance} points")
+
+    def validate_keepers(self, roll, roll_string):
+        """ensures that kept dice are valid for the roll
+
+        Args:
+            roll
+            roll_string
+
+        Returns:
+            valid keeper values
+        """
+        while True:
+            print("Enter dice to keep, or (q)uit:")
+            response = input("> ")
+            if response == "q":
+                self.end_game()
+                break
+
+            keeper_values = []
+            for char in response:
+                if char.isnumeric():
+                    keeper_values.append(int(char))
+
+            if GameLogic.validate_keepers(roll, keeper_values):
+                return keeper_values
+            else:
+                print("Cheater!!! Or possibly made a typo...")
+                print(f"*** {roll_string} ***")
 
 
-if __name__=='__main__':
-    Game.play(Game)
-    # try: 
-    #    Game.play(Game)
-    # except KeyboardInterrupt:
-    #     quit_game('Keyboard Interupt Detected')
+if __name__ == "__main__":
+    game = Game()
+    game.play()

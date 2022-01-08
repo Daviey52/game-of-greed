@@ -1,95 +1,104 @@
-import random
-from collections import defaultdict
-
+from collections import Counter
+from random import randint
 
 
 class GameLogic:
+    @staticmethod
+    def roll_dice(num=6):
+        # version_1
+
+        return tuple([randint(1, 6) for _ in range(num)])
 
     @staticmethod
-    def roll_dice(rolled_dice):
-        dice_list = []
-        for _ in range(rolled_dice):
-            dice_list.append(random.randint(1,6))
-        return tuple(dice_list)
+    def calculate_score(dice):
+        """
+        dice is a tuple of integers that represent the user's selected dice pulled out from current roll
+        """
+        # version_1
 
-    @staticmethod
-    def calculate_score(tup):
+        if len(dice) > 6:
+            raise Exception("Cheating Cheater!")
+
+        counts = Counter(dice)
+
+        if len(counts) == 6:
+            return 1500
+
+        if len(counts) == 3 and all(val == 2 for val in counts.values()):
+            return 1500
+
         score = 0
-        # Sorted tupple into a list for straight
-        sorttup = sorted(tup)
-        freq = defaultdict(int)
-        # Empty list for three pairs
-        threepairs = []
-        #Number frequency
-        
-        for el in tup:
-                freq[el] += 1
-        # print(freq.items())
 
-        #Three pairs
+        ones_used = fives_used = False
 
-            
+        for num in range(1, 6 + 1):
 
-        # Straight
-        if sorttup == [1,2,3,4,5,6]:
-            score = 1500
-        else: 
-            for key, y in freq.items():
-                # 3 or more 1s
-                
-                if key == 1 and y > 2:
-                    if y == 3:
-                        score += 1000
-                    elif y == 4:
-                        score += 2000
-                    elif y == 5:
-                        score += 3000
-                    elif y == 6:
-                        score += 4000
-                elif y == 6:
-                    score += (key * 100)*4
-                elif y == 5:
-                    score += (key * 100)*3
-                elif y == 4:
-                    score += (key * 100)*2
-                elif y == 3:
-                    score += (key * 100)
-                # 1 occurance of the values 1 and 5
-                elif y == 1 :
-                    if key == 5:
-                        score += 50
-                    elif key == 1:
-                        score += 100
-                # 2 occurances of the values 1 and 5
-                elif y == 2:
-                    threepairs.append(key)
-                    if len(threepairs) == 3:
-                        score = 1500
-                    elif key == 5:
-                        score += 100
-                    elif key == 1:
-                        score += 200
+            pip_count = counts[num]
+
+            if pip_count >= 3:
+
+                if num == 1:
+
+                    ones_used = True
+
+                elif num == 5:
+
+                    fives_used = True
+
+                score += num * 100
+
+                # handle 4,5,6 of a kind
+                pips_beyond_3 = pip_count - 3
+
+                score += score * pips_beyond_3
+
+                # bug if 2 threesomes? Let's test it
+
+                # 1s are worth 10x
+                if num == 1:
+                    score *= 10
+
+        if not ones_used:
+            score += counts.get(1, 0) * 100
+
+        if not fives_used:
+            score += counts.get(5, 0) * 50
+
         return score
 
     @staticmethod
-    def get_scorers(tup):
-        new_list = []
-        val = [int(i) for i in tup]
-        for num in val:
-            temp_list=[]
-            temp_list.append(num)
-            if GameLogic.calculate_score(temp_list) > 0:
-                new_list.append(num)
-        return tuple(new_list)
+    def validate_keepers(roll, keepers):
+        # version_3
+
+        # pro tip: you can do some math operations with counters
+        # check https://docs.python.org/3/library/collections.html#collections.Counter
+        keeper_counter = Counter(keepers)
+        roll_counter = Counter(roll)
+
+        # a "valid" result is an empty Counter result
+        result = keeper_counter - roll_counter
+
+        # an empty Counter is falsy, so use "not" to flip it
+        return not result
 
     @staticmethod
-    def validate_keepers(roll, keeper):
-        cheat = set(keeper).issubset(roll)
-        if GameLogic.calculate_score(roll) < GameLogic.calculate_score(keeper):
-            x = False
-        else:
-            x = True
-        return cheat and x
+    def get_scorers(dice):
+        # version_3
 
-# if __name__=='__main__':
-    # GameLogic.calculate_score(tup) 
+        all_dice_score = GameLogic.calculate_score(dice)
+
+        if all_dice_score == 0:
+            return tuple()
+
+        scorers = []
+
+        # for i in range(len(dice)):
+
+        for i, val in enumerate(dice):
+            sub_roll = dice[:i] + dice[i + 1 :]
+            sub_score = GameLogic.calculate_score(sub_roll)
+
+            if sub_score != all_dice_score:
+                scorers.append(val)
+
+        return tuple(scorers)
