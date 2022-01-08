@@ -36,8 +36,15 @@ class Game:
                 for roll in playing:
                     roll_No = roll_No + str(roll)+ " "
                 print(f"*** {roll_No}***")
-                print("Enter dice to keep, or (q)uit:")
-                play_option = Game.remove(Game,input("> "))
+                val = [int(i) for i in playing]
+                if GameLogic.calculate_score(val) == 0:
+                    Game.zilch(Game)
+                    score = 0
+                    Banker.clear_shelf(Banker)
+                    play_option = 'b'
+                else:
+                    print("Enter dice to keep, or (q)uit:")
+                    play_option = Game.remove(Game,input("> "))
 
             elif play_option.lower() == "q":
                 print(f"Thanks for playing. You earned {banked} points")
@@ -69,7 +76,8 @@ class Game:
                 for roll in playing:
                     roll_No = roll_No + str(roll)+ " "
                 print(f"*** {roll_No}***")
-                if GameLogic.calculate_score(playing) == 0:
+                val = [int(i) for i in playing]
+                if GameLogic.calculate_score(val) == 0:
                     Game.zilch(Game)
                     score = 0
                     Banker.clear_shelf(Banker)
